@@ -5,21 +5,24 @@ const analyze = require('rollup-plugin-analyzer').plugin
 
 const extractIdRegex = /(\/|\\)([^\/\\]*)?\.js$/
 
-function parseStats(entry, stats) {
-  const result = {}
-  result.name = entry.substr(0, entry.length - 3)
-  result.size = stats.bundleSize
-  result.dependencies = stats.modules
-    .map(module => ({
-      name: module.id.match(extractIdRegex)[2],
-      size: module.size,
-      percent: module.percent,
-      internal: module.id.indexOf('.internal') !== -1,
-      dependents: module.dependents.map(dependent => dependent.match(extractIdRegex)[2])
-    }))
-    .filter(dependency => dependency.name !== result.name)
-
-  return result  
+function parseStats(entry, stats) {  
+  const name = entry.substr(0, entry.length - 3)  
+  const modules = stats.modules.map(module => ({
+    name: module.id.match(extractIdRegex)[2],
+    size: module.size,
+    percent: module.percent,
+    internal: module.id.indexOf('.internal') !== -1,
+    dependents: module.dependents.map(dependent => dependent.match(extractIdRegex)[2])
+  }))
+  const ownIndex = modules.findIndex(module => module.name === name)
+  const ownModule = modules.splice(ownIndex, 1)[0]  
+  return {
+    name,
+    size: stats.bundleSize,
+    ownSize: ownModule.size,
+    ownPercent: ownModule.percent,
+    dependencies: modules
+  }
 }
 
 const entries = fs.readdirSync('.').filter(file => file.match(/^[^\.].*\.js$/))

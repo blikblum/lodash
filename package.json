@@ -1,9 +1,8 @@
 {
-  "name": "lodash",
+  "name": "nextdash",
   "version": "5.0.0",
   "license": "MIT",
-  "private": true,
-  "main": "lodash.js",
+  "main": "index.js",
   "engines": {
     "node": ">=4.0.0"
   },

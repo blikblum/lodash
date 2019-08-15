@@ -14,6 +14,7 @@
     "build:fp-modules": "node lib/fp/build-modules.js",
     "build:main": "node lib/main/build-dist.js",
     "build:main-modules": "node lib/main/build-modules.js",
+    "build:test": "node tools/buildtest.js",
     "doc": "node lib/main/build-doc github && npm run test:doc",
     "doc:fp": "node lib/fp/build-doc",
     "doc:site": "node lib/main/build-doc site",
@@ -25,6 +26,7 @@
     "test:fp": "node test/test-fp",
     "test:wip": "mocha -r esm test/*.test.js",
     "test:main": "node test/test",
+    "test:oldsuite": "node test-oldsuite/test",
     "validate": "npm run style && npm run test"
   },
   "devDependencies": {
@@ -55,6 +57,7 @@
     "qunitjs": "^2.1.0",
     "request": "^2.79.0",
     "requirejs": "^2.3.2",
+    "rollup": "^1.19.4",
     "sauce-tunnel": "^2.5.0",
     "uglify-js": "2.7.5",
     "webpack": "^1.14.0"

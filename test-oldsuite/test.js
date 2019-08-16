@@ -2661,19 +2661,6 @@
       assert.deepEqual(actual.hasOwnProperty, 2);
     });
 
-    QUnit.test('should work with a number for `iteratee`', function(assert) {
-      assert.expect(2);
-
-      var array = [
-        [1, 'a'],
-        [2, 'a'],
-        [2, 'b']
-      ];
-
-      assert.deepEqual(_.countBy(array, 0), { '1': 1, '2': 2 });
-      assert.deepEqual(_.countBy(array, 1), { 'a': 2, 'b': 1 });
-    });
-
     QUnit.test('should work with an object for `collection`', function(assert) {
       assert.expect(1);
 

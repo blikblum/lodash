@@ -3587,9 +3587,9 @@
 
       var array = [1, null, 3];
 
-      assert.deepEqual(func(args, 3, { '0': 1 }), [1, 2, 3]);
-      assert.deepEqual(func(null, array, 1), []);
-      assert.deepEqual(func(array, args, null), [null]);
+      assert.deepEqual(func(args, 3, identity), [1, 2, 3]);
+      assert.deepEqual(func(null, array, identity), []);
+      assert.deepEqual(func(array, args, identity), [null]);
     });
   });
 
@@ -3599,7 +3599,7 @@
 
   (function() {
     QUnit.test('should accept an `iteratee`', function(assert) {
-      assert.expect(2);
+      assert.expect(1);
 
       var actual = _.differenceBy([2.1, 1.2], [2.3, 3.4], Math.floor);
       assert.deepEqual(actual, [1.2]);

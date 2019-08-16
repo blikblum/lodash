@@ -4063,13 +4063,6 @@
 
       assert.strictEqual(_.every([undefined, undefined, undefined], identity), false);
     });
-
-    QUnit.test('should work as an iteratee for methods like `_.map`', function(assert) {
-      assert.expect(1);
-
-      var actual = lodashStable.map([[1]], _.every);
-      assert.deepEqual(actual, [true]);
-    });
   }());
 
   /*--------------------------------------------------------------------------*/

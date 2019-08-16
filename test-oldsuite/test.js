@@ -3763,16 +3763,6 @@
 
       assert.deepEqual(_.dropRight(array, 1.6), [1, 2]);
     });
-
-    QUnit.test('should work as an iteratee for methods like `_.map`', function(assert) {
-      assert.expect(1);
-
-      var array = [[1, 2, 3], [4, 5, 6], [7, 8, 9]],
-          actual = lodashStable.map(array, _.dropRight);
-
-      assert.deepEqual(actual, [[1, 2], [4, 5], [7, 8]]);
-    });
-
   }());
 
   /*--------------------------------------------------------------------------*/

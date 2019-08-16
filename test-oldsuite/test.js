@@ -2419,20 +2419,6 @@
       assert.deepEqual(args2, expected);
     });
 
-    QUnit.test('should work with predicate shorthands', function(assert) {
-      assert.expect(3);
-
-      var cond = _.cond([
-        [{ 'a': 1 }, stubA],
-        [['b', 1],   stubB],
-        ['c',        stubC]
-      ]);
-
-      assert.strictEqual(cond({ 'a':  1, 'b': 2, 'c': 3 }), 'a');
-      assert.strictEqual(cond({ 'a':  0, 'b': 1, 'c': 2 }), 'b');
-      assert.strictEqual(cond({ 'a': -1, 'b': 0, 'c': 1 }), 'c');
-    });
-
     QUnit.test('should return `undefined` when no condition is met', function(assert) {
       assert.expect(1);
 
@@ -2662,27 +2648,6 @@
 
       var actual = _.countBy(array, Math.floor);
       assert.deepEqual(actual, { '4': 1, '6': 2 });
-    });
-
-    QUnit.test('should use `_.identity` when `iteratee` is nullish', function(assert) {
-      assert.expect(1);
-
-      var array = [4, 6, 6],
-          values = [, null, undefined],
-          expected = lodashStable.map(values, lodashStable.constant({ '4': 1, '6':  2 }));
-
-      var actual = lodashStable.map(values, function(value, index) {
-        return index ? _.countBy(array, value) : _.countBy(array);
-      });
-
-      assert.deepEqual(actual, expected);
-    });
-
-    QUnit.test('should work with `_.property` shorthands', function(assert) {
-      assert.expect(1);
-
-      var actual = _.countBy(['one', 'two', 'three'], 'length');
-      assert.deepEqual(actual, { '3': 2, '5': 1 });
     });
 
     QUnit.test('should only add values to own, not inherited, properties', function(assert) {
@@ -3638,9 +3603,6 @@
 
       var actual = _.differenceBy([2.1, 1.2], [2.3, 3.4], Math.floor);
       assert.deepEqual(actual, [1.2]);
-
-      actual = _.differenceBy([{ 'x': 2 }, { 'x': 1 }], [{ 'x': 1 }], 'x');
-      assert.deepEqual(actual, [{ 'x': 2 }]);
     });
 
     QUnit.test('should provide correct `iteratee` arguments', function(assert) {
@@ -3860,24 +3822,6 @@
 
       assert.deepEqual(args, [4, 3, array]);
     });
-
-    QUnit.test('should work with `_.matches` shorthands', function(assert) {
-      assert.expect(1);
-
-      assert.deepEqual(_.dropRightWhile(objects, { 'b': 2 }), objects.slice(0, 2));
-    });
-
-    QUnit.test('should work with `_.matchesProperty` shorthands', function(assert) {
-      assert.expect(1);
-
-      assert.deepEqual(_.dropRightWhile(objects, ['b', 2]), objects.slice(0, 2));
-    });
-
-    QUnit.test('should work with `_.property` shorthands', function(assert) {
-      assert.expect(1);
-
-      assert.deepEqual(_.dropRightWhile(objects, 'b'), objects.slice(0, 1));
-    });
   }());
 
   /*--------------------------------------------------------------------------*/
@@ -3913,24 +3857,6 @@
       });
 
       assert.deepEqual(args, [1, 0, array]);
-    });
-
-    QUnit.test('should work with `_.matches` shorthands', function(assert) {
-      assert.expect(1);
-
-      assert.deepEqual(_.dropWhile(objects, { 'b': 2 }), objects.slice(1));
-    });
-
-    QUnit.test('should work with `_.matchesProperty` shorthands', function(assert) {
-      assert.expect(1);
-
-      assert.deepEqual(_.dropWhile(objects, ['b', 2]), objects.slice(1));
-    });
-
-    QUnit.test('should work with `_.property` shorthands', function(assert) {
-      assert.expect(1);
-
-      assert.deepEqual(_.dropWhile(objects, 'b'), objects.slice(2));
     });
   }());
 
@@ -4138,44 +4064,6 @@
       assert.strictEqual(_.every([undefined, undefined, undefined], identity), false);
     });
 
-    QUnit.test('should use `_.identity` when `predicate` is nullish', function(assert) {
-      assert.expect(2);
-
-      var values = [, null, undefined],
-          expected = lodashStable.map(values, stubFalse);
-
-      var actual = lodashStable.map(values, function(value, index) {
-        var array = [0];
-        return index ? _.every(array, value) : _.every(array);
-      });
-
-      assert.deepEqual(actual, expected);
-
-      expected = lodashStable.map(values, stubTrue);
-      actual = lodashStable.map(values, function(value, index) {
-        var array = [1];
-        return index ? _.every(array, value) : _.every(array);
-      });
-
-      assert.deepEqual(actual, expected);
-    });
-
-    QUnit.test('should work with `_.property` shorthands', function(assert) {
-      assert.expect(2);
-
-      var objects = [{ 'a': 0, 'b': 1 }, { 'a': 1, 'b': 2 }];
-      assert.strictEqual(_.every(objects, 'a'), false);
-      assert.strictEqual(_.every(objects, 'b'), true);
-    });
-
-    QUnit.test('should work with `_.matches` shorthands', function(assert) {
-      assert.expect(2);
-
-      var objects = [{ 'a': 0, 'b': 0 }, { 'a': 0, 'b': 1 }];
-      assert.strictEqual(_.every(objects, { 'a': 0 }), true);
-      assert.strictEqual(_.every(objects, { 'b': 1 }), false);
-    });
-
     QUnit.test('should work as an iteratee for methods like `_.map`', function(assert) {
       assert.expect(1);
 
@@ -4254,24 +4142,6 @@
       assert.expect(1);
 
       assert.strictEqual(func(objects, function(object) { return object.a === 3; }), expected[1]);
-    });
-
-    QUnit.test('`_.' + methodName + '` should work with `_.matches` shorthands', function(assert) {
-      assert.expect(1);
-
-      assert.strictEqual(func(objects, { 'b': 2 }), expected[2]);
-    });
-
-    QUnit.test('`_.' + methodName + '` should work with `_.matchesProperty` shorthands', function(assert) {
-      assert.expect(1);
-
-      assert.strictEqual(func(objects, ['b', 2]), expected[2]);
-    });
-
-    QUnit.test('`_.' + methodName + '` should work with `_.property` shorthands', function(assert) {
-      assert.expect(1);
-
-      assert.strictEqual(func(objects, 'b'), expected[0]);
     });
 
     QUnit.test('`_.' + methodName + '` should return `' + expected[1] + '` for empty collections', function(assert) {
@@ -4559,19 +4429,6 @@
       assert.deepEqual(_.flatMapDepth(array, identity), [1, 2, [3, [4]], 5]);
     });
 
-    QUnit.test('should use `_.identity` when `iteratee` is nullish', function(assert) {
-      assert.expect(1);
-
-      var values = [, null, undefined],
-          expected = lodashStable.map(values, lodashStable.constant([1, 2, [3, [4]], 5]));
-
-      var actual = lodashStable.map(values, function(value, index) {
-        return index ? _.flatMapDepth(array, value) : _.flatMapDepth(array);
-      });
-
-      assert.deepEqual(actual, expected);
-    });
-
     QUnit.test('should treat a `depth` of < `1` as a shallow clone', function(assert) {
       assert.expect(2);
 
@@ -4608,13 +4465,6 @@
       assert.deepEqual(actual, expected);
     });
 
-    QUnit.test('`_.' + methodName + '` should work with `_.property` shorthands', function(assert) {
-      assert.expect(1);
-
-      var objects = [{ 'a': [1, 2] }, { 'a': [3, 4] }];
-      assert.deepEqual(func(objects, 'a'), array);
-    });
-
     QUnit.test('`_.' + methodName + '` should iterate over own string keyed properties of objects', function(assert) {
       assert.expect(1);
 
@@ -4625,23 +4475,6 @@
 
       var actual = func(new Foo, identity);
       assert.deepEqual(actual, [1, 2]);
-    });
-
-    QUnit.test('`_.' + methodName + '` should use `_.identity` when `iteratee` is nullish', function(assert) {
-      assert.expect(2);
-
-      var array = [[1, 2], [3, 4]],
-          object = { 'a': [1, 2], 'b': [3, 4] },
-          values = [, null, undefined],
-          expected = lodashStable.map(values, lodashStable.constant([1, 2, 3, 4]));
-
-      lodashStable.each([array, object], function(collection) {
-        var actual = lodashStable.map(values, function(value, index) {
-          return index ? func(collection, value) : func(collection);
-        });
-
-        assert.deepEqual(actual, expected);
-      });
     });
 
     QUnit.test('`_.' + methodName + '` should accept a falsey `collection`', function(assert) {
@@ -5719,27 +5552,6 @@
       assert.deepEqual(actual, { '4': [4.2], '6': [6.1, 6.3] });
     });
 
-    QUnit.test('should use `_.identity` when `iteratee` is nullish', function(assert) {
-      assert.expect(1);
-
-      var array = [6, 4, 6],
-          values = [, null, undefined],
-          expected = lodashStable.map(values, lodashStable.constant({ '4': [4], '6':  [6, 6] }));
-
-      var actual = lodashStable.map(values, function(value, index) {
-        return index ? _.groupBy(array, value) : _.groupBy(array);
-      });
-
-      assert.deepEqual(actual, expected);
-    });
-
-    QUnit.test('should work with `_.property` shorthands', function(assert) {
-      assert.expect(1);
-
-      var actual = _.groupBy(['one', 'two', 'three'], 'length');
-      assert.deepEqual(actual, { '3': ['one', 'two'], '5': ['three'] });
-    });
-
     QUnit.test('should only add values to own, not inherited, properties', function(assert) {
       assert.expect(2);
 
@@ -6091,19 +5903,6 @@
       assert.expect(1);
 
       assert.strictEqual(_.first, _.head);
-    });
-  }());
-
-  /*--------------------------------------------------------------------------*/
-
-  QUnit.module('lodash.identity');
-
-  (function() {
-    QUnit.test('should return the first argument given', function(assert) {
-      assert.expect(1);
-
-      var object = { 'name': 'fred' };
-      assert.strictEqual(_.identity(object), object);
     });
   }());
 
@@ -6528,19 +6327,6 @@
 
       var actual = _.invertBy(object, function(value) {
         return 'group' + value;
-      });
-
-      assert.deepEqual(actual, expected);
-    });
-
-    QUnit.test('should use `_.identity` when `iteratee` is nullish', function(assert) {
-      assert.expect(1);
-
-      var values = [, null, undefined],
-          expected = lodashStable.map(values, lodashStable.constant({ '1': ['a', 'c'], '2': ['b'] }));
-
-      var actual = lodashStable.map(values, function(value, index) {
-        return index ? _.invertBy(object, value) : _.invertBy(object);
       });
 
       assert.deepEqual(actual, expected);
@@ -9816,728 +9602,6 @@
     });
   }());
 
-  /*--------------------------------------------------------------------------*/
-
-  QUnit.module('lodash.iteratee');
-
-  (function() {
-    QUnit.test('should provide arguments to `func`', function(assert) {
-      assert.expect(1);
-
-      var fn = function() { return slice.call(arguments); },
-          iteratee = _.iteratee(fn),
-          actual = iteratee('a', 'b', 'c', 'd', 'e', 'f');
-
-      assert.deepEqual(actual, ['a', 'b', 'c', 'd', 'e', 'f']);
-    });
-
-    QUnit.test('should return `_.identity` when `func` is nullish', function(assert) {
-      assert.expect(1);
-
-      var object = {},
-          values = [, null, undefined],
-          expected = lodashStable.map(values, lodashStable.constant([!isNpm && _.identity, object]));
-
-      var actual = lodashStable.map(values, function(value, index) {
-        var identity = index ? _.iteratee(value) : _.iteratee();
-        return [!isNpm && identity, identity(object)];
-      });
-
-      assert.deepEqual(actual, expected);
-    });
-
-    QUnit.test('should return an iteratee created by `_.matches` when `func` is an object', function(assert) {
-      assert.expect(2);
-
-      var matches = _.iteratee({ 'a': 1, 'b': 2 });
-      assert.strictEqual(matches({ 'a': 1, 'b': 2, 'c': 3 }), true);
-      assert.strictEqual(matches({ 'b': 2 }), false);
-    });
-
-    QUnit.test('should not change `_.matches` behavior if `source` is modified', function(assert) {
-      assert.expect(9);
-
-      var sources = [
-        { 'a': { 'b': 2, 'c': 3 } },
-        { 'a': 1, 'b': 2 },
-        { 'a': 1 }
-      ];
-
-      lodashStable.each(sources, function(source, index) {
-        var object = lodashStable.cloneDeep(source),
-            matches = _.iteratee(source);
-
-        assert.strictEqual(matches(object), true);
-
-        if (index) {
-          source.a = 2;
-          source.b = 1;
-          source.c = 3;
-        } else {
-          source.a.b = 1;
-          source.a.c = 2;
-          source.a.d = 3;
-        }
-        assert.strictEqual(matches(object), true);
-        assert.strictEqual(matches(source), false);
-      });
-    });
-
-    QUnit.test('should return an iteratee created by `_.matchesProperty` when `func` is an array', function(assert) {
-      assert.expect(3);
-
-      var array = ['a', undefined],
-          matches = _.iteratee([0, 'a']);
-
-      assert.strictEqual(matches(array), true);
-
-      matches = _.iteratee(['0', 'a']);
-      assert.strictEqual(matches(array), true);
-
-      matches = _.iteratee([1, undefined]);
-      assert.strictEqual(matches(array), true);
-    });
-
-    QUnit.test('should support deep paths for `_.matchesProperty` shorthands', function(assert) {
-      assert.expect(1);
-
-      var object = { 'a': { 'b': { 'c': 1, 'd': 2 } } },
-          matches = _.iteratee(['a.b', { 'c': 1 }]);
-
-      assert.strictEqual(matches(object), true);
-    });
-
-    QUnit.test('should not change `_.matchesProperty` behavior if `source` is modified', function(assert) {
-      assert.expect(9);
-
-      var sources = [
-        { 'a': { 'b': 2, 'c': 3 } },
-        { 'a': 1, 'b': 2 },
-        { 'a': 1 }
-      ];
-
-      lodashStable.each(sources, function(source, index) {
-        var object = { 'a': lodashStable.cloneDeep(source) },
-            matches = _.iteratee(['a', source]);
-
-        assert.strictEqual(matches(object), true);
-
-        if (index) {
-          source.a = 2;
-          source.b = 1;
-          source.c = 3;
-        } else {
-          source.a.b = 1;
-          source.a.c = 2;
-          source.a.d = 3;
-        }
-        assert.strictEqual(matches(object), true);
-        assert.strictEqual(matches({ 'a': source }), false);
-      });
-    });
-
-    QUnit.test('should return an iteratee created by `_.property` when `func` is a number or string', function(assert) {
-      assert.expect(2);
-
-      var array = ['a'],
-          prop = _.iteratee(0);
-
-      assert.strictEqual(prop(array), 'a');
-
-      prop = _.iteratee('0');
-      assert.strictEqual(prop(array), 'a');
-    });
-
-    QUnit.test('should support deep paths for `_.property` shorthands', function(assert) {
-      assert.expect(1);
-
-      var object = { 'a': { 'b': 2 } },
-          prop = _.iteratee('a.b');
-
-      assert.strictEqual(prop(object), 2);
-    });
-
-    QUnit.test('should work with functions created by `_.partial` and `_.partialRight`', function(assert) {
-      assert.expect(2);
-
-      var fn = function() {
-        var result = [this.a];
-        push.apply(result, arguments);
-        return result;
-      };
-
-      var expected = [1, 2, 3],
-          object = { 'a': 1 , 'iteratee': _.iteratee(_.partial(fn, 2)) };
-
-      assert.deepEqual(object.iteratee(3), expected);
-
-      object.iteratee = _.iteratee(_.partialRight(fn, 3));
-      assert.deepEqual(object.iteratee(2), expected);
-    });
-
-    QUnit.test('should use internal `iteratee` if external is unavailable', function(assert) {
-      assert.expect(1);
-
-      var iteratee = _.iteratee;
-      delete _.iteratee;
-
-      assert.deepEqual(_.map([{ 'a': 1 }], 'a'), [1]);
-
-      _.iteratee = iteratee;
-    });
-
-    QUnit.test('should work as an iteratee for methods like `_.map`', function(assert) {
-      assert.expect(1);
-
-      var fn = function() { return this instanceof Number; },
-          array = [fn, fn, fn],
-          iteratees = lodashStable.map(array, _.iteratee),
-          expected = lodashStable.map(array, stubFalse);
-
-      var actual = lodashStable.map(iteratees, function(iteratee) {
-        return iteratee();
-      });
-
-      assert.deepEqual(actual, expected);
-    });
-  }());
-
-  /*--------------------------------------------------------------------------*/
-
-  QUnit.module('custom `_.iteratee` methods');
-
-  (function() {
-    var array = ['one', 'two', 'three'],
-        getPropA = lodashStable.partial(_.property, 'a'),
-        getPropB = lodashStable.partial(_.property, 'b'),
-        getLength = lodashStable.partial(_.property, 'length'),
-        iteratee = _.iteratee;
-
-    var getSum = function() {
-      return function(result, object) {
-        return result + object.a;
-      };
-    };
-
-    var objects = [
-      { 'a': 0, 'b': 0 },
-      { 'a': 1, 'b': 0 },
-      { 'a': 1, 'b': 1 }
-    ];
-
-    QUnit.test('`_.countBy` should use `_.iteratee` internally', function(assert) {
-      assert.expect(1);
-
-      if (!isModularize) {
-        _.iteratee = getLength;
-        assert.deepEqual(_.countBy(array), { '3': 2, '5': 1 });
-        _.iteratee = iteratee;
-      }
-      else {
-        skipAssert(assert);
-      }
-    });
-
-    QUnit.test('`_.differenceBy` should use `_.iteratee` internally', function(assert) {
-      assert.expect(1);
-
-      if (!isModularize) {
-        _.iteratee = getPropA;
-        assert.deepEqual(_.differenceBy(objects, [objects[1]]), [objects[0]]);
-        _.iteratee = iteratee;
-      }
-      else {
-        skipAssert(assert);
-      }
-    });
-
-    QUnit.test('`_.dropRightWhile` should use `_.iteratee` internally', function(assert) {
-      assert.expect(1);
-
-      if (!isModularize) {
-        _.iteratee = getPropB;
-        assert.deepEqual(_.dropRightWhile(objects), objects.slice(0, 2));
-        _.iteratee = iteratee;
-      }
-      else {
-        skipAssert(assert);
-      }
-    });
-
-    QUnit.test('`_.dropWhile` should use `_.iteratee` internally', function(assert) {
-      assert.expect(1);
-
-      if (!isModularize) {
-        _.iteratee = getPropB;
-        assert.deepEqual(_.dropWhile(objects.reverse()).reverse(), objects.reverse().slice(0, 2));
-        _.iteratee = iteratee;
-      }
-      else {
-        skipAssert(assert);
-      }
-    });
-
-    QUnit.test('`_.every` should use `_.iteratee` internally', function(assert) {
-      assert.expect(1);
-
-      if (!isModularize) {
-        _.iteratee = getPropA;
-        assert.strictEqual(_.every(objects.slice(1)), true);
-        _.iteratee = iteratee;
-      }
-      else {
-        skipAssert(assert);
-      }
-    });
-
-    QUnit.test('`_.filter` should use `_.iteratee` internally', function(assert) {
-      assert.expect(1);
-
-      if (!isModularize) {
-        var objects = [{ 'a': 0 }, { 'a': 1 }];
-
-        _.iteratee = getPropA;
-        assert.deepEqual(_.filter(objects), [objects[1]]);
-        _.iteratee = iteratee;
-      }
-      else {
-        skipAssert(assert);
-      }
-    });
-
-    QUnit.test('`_.find` should use `_.iteratee` internally', function(assert) {
-      assert.expect(1);
-
-      if (!isModularize) {
-        _.iteratee = getPropA;
-        assert.strictEqual(_.find(objects), objects[1]);
-        _.iteratee = iteratee;
-      }
-      else {
-        skipAssert(assert);
-      }
-    });
-
-    QUnit.test('`_.findIndex` should use `_.iteratee` internally', function(assert) {
-      assert.expect(1);
-
-      if (!isModularize) {
-        _.iteratee = getPropA;
-        assert.strictEqual(_.findIndex(objects), 1);
-        _.iteratee = iteratee;
-      }
-      else {
-        skipAssert(assert);
-      }
-    });
-
-    QUnit.test('`_.findLast` should use `_.iteratee` internally', function(assert) {
-      assert.expect(1);
-
-      if (!isModularize) {
-        _.iteratee = getPropA;
-        assert.strictEqual(_.findLast(objects), objects[2]);
-        _.iteratee = iteratee;
-      }
-      else {
-        skipAssert(assert);
-      }
-    });
-
-    QUnit.test('`_.findLastIndex` should use `_.iteratee` internally', function(assert) {
-      assert.expect(1);
-
-      if (!isModularize) {
-        _.iteratee = getPropA;
-        assert.strictEqual(_.findLastIndex(objects), 2);
-        _.iteratee = iteratee;
-      }
-      else {
-        skipAssert(assert);
-      }
-    });
-
-    QUnit.test('`_.findKey` should use `_.iteratee` internally', function(assert) {
-      assert.expect(1);
-
-      if (!isModularize) {
-        _.iteratee = getPropB;
-        assert.strictEqual(_.findKey(objects), '2');
-        _.iteratee = iteratee;
-      }
-      else {
-        skipAssert(assert);
-      }
-    });
-
-    QUnit.test('`_.findLastKey` should use `_.iteratee` internally', function(assert) {
-      assert.expect(1);
-
-      if (!isModularize) {
-        _.iteratee = getPropB;
-        assert.strictEqual(_.findLastKey(objects), '2');
-        _.iteratee = iteratee;
-      }
-      else {
-        skipAssert(assert);
-      }
-    });
-
-    QUnit.test('`_.groupBy` should use `_.iteratee` internally', function(assert) {
-      assert.expect(1);
-
-      if (!isModularize) {
-        _.iteratee = getLength;
-        assert.deepEqual(_.groupBy(array), { '3': ['one', 'two'], '5': ['three'] });
-        _.iteratee = iteratee;
-      }
-      else {
-        skipAssert(assert);
-      }
-    });
-
-    QUnit.test('`_.intersectionBy` should use `_.iteratee` internally', function(assert) {
-      assert.expect(1);
-
-      if (!isModularize) {
-        _.iteratee = getPropA;
-        assert.deepEqual(_.intersectionBy(objects, [objects[2]]), [objects[1]]);
-        _.iteratee = iteratee;
-      }
-      else {
-        skipAssert(assert);
-      }
-    });
-
-    QUnit.test('`_.keyBy` should use `_.iteratee` internally', function(assert) {
-      assert.expect(1);
-
-      if (!isModularize) {
-        _.iteratee = getLength;
-        assert.deepEqual(_.keyBy(array), { '3': 'two', '5': 'three' });
-        _.iteratee = iteratee;
-      }
-      else {
-        skipAssert(assert);
-      }
-    });
-
-    QUnit.test('`_.map` should use `_.iteratee` internally', function(assert) {
-      assert.expect(1);
-
-      if (!isModularize) {
-        _.iteratee = getPropA;
-        assert.deepEqual(_.map(objects), [0, 1, 1]);
-        _.iteratee = iteratee;
-      }
-      else {
-        skipAssert(assert);
-      }
-    });
-
-    QUnit.test('`_.mapKeys` should use `_.iteratee` internally', function(assert) {
-      assert.expect(1);
-
-      if (!isModularize) {
-        _.iteratee = getPropB;
-        assert.deepEqual(_.mapKeys({ 'a': { 'b': 2 } }), { '2':  { 'b': 2 } });
-        _.iteratee = iteratee;
-      }
-      else {
-        skipAssert(assert);
-      }
-    });
-
-    QUnit.test('`_.mapValues` should use `_.iteratee` internally', function(assert) {
-      assert.expect(1);
-
-      if (!isModularize) {
-        _.iteratee = getPropB;
-        assert.deepEqual(_.mapValues({ 'a': { 'b': 2 } }), { 'a': 2 });
-        _.iteratee = iteratee;
-      }
-      else {
-        skipAssert(assert);
-      }
-    });
-
-    QUnit.test('`_.maxBy` should use `_.iteratee` internally', function(assert) {
-      assert.expect(1);
-
-      if (!isModularize) {
-        _.iteratee = getPropB;
-        assert.deepEqual(_.maxBy(objects), objects[2]);
-        _.iteratee = iteratee;
-      }
-      else {
-        skipAssert(assert);
-      }
-    });
-
-    QUnit.test('`_.meanBy` should use `_.iteratee` internally', function(assert) {
-      assert.expect(1);
-
-      if (!isModularize) {
-        _.iteratee = getPropA;
-        assert.strictEqual(_.meanBy(objects), 2 / 3);
-        _.iteratee = iteratee;
-      }
-      else {
-        skipAssert(assert);
-      }
-    });
-
-    QUnit.test('`_.minBy` should use `_.iteratee` internally', function(assert) {
-      assert.expect(1);
-
-      if (!isModularize) {
-        _.iteratee = getPropB;
-        assert.deepEqual(_.minBy(objects), objects[0]);
-        _.iteratee = iteratee;
-      }
-      else {
-        skipAssert(assert);
-      }
-    });
-
-    QUnit.test('`_.partition` should use `_.iteratee` internally', function(assert) {
-      assert.expect(1);
-
-      if (!isModularize) {
-        var objects = [{ 'a': 1 }, { 'a': 1 }, { 'b': 2 }];
-
-        _.iteratee = getPropA;
-        assert.deepEqual(_.partition(objects), [objects.slice(0, 2), objects.slice(2)]);
-        _.iteratee = iteratee;
-      }
-      else {
-        skipAssert(assert);
-      }
-    });
-
-    QUnit.test('`_.pullAllBy` should use `_.iteratee` internally', function(assert) {
-      assert.expect(1);
-
-      if (!isModularize) {
-        _.iteratee = getPropA;
-        assert.deepEqual(_.pullAllBy(objects.slice(), [{ 'a': 1, 'b': 0 }]), [objects[0]]);
-        _.iteratee = iteratee;
-      }
-      else {
-        skipAssert(assert);
-      }
-    });
-
-    QUnit.test('`_.reduce` should use `_.iteratee` internally', function(assert) {
-      assert.expect(1);
-
-      if (!isModularize) {
-        _.iteratee = getSum;
-        assert.strictEqual(_.reduce(objects, undefined, 0), 2);
-        _.iteratee = iteratee;
-      }
-      else {
-        skipAssert(assert);
-      }
-    });
-
-    QUnit.test('`_.reduceRight` should use `_.iteratee` internally', function(assert) {
-      assert.expect(1);
-
-      if (!isModularize) {
-        _.iteratee = getSum;
-        assert.strictEqual(_.reduceRight(objects, undefined, 0), 2);
-        _.iteratee = iteratee;
-      }
-      else {
-        skipAssert(assert);
-      }
-    });
-
-    QUnit.test('`_.reject` should use `_.iteratee` internally', function(assert) {
-      assert.expect(1);
-
-      if (!isModularize) {
-        var objects = [{ 'a': 0 }, { 'a': 1 }];
-
-        _.iteratee = getPropA;
-        assert.deepEqual(_.reject(objects), [objects[0]]);
-        _.iteratee = iteratee;
-      }
-      else {
-        skipAssert(assert);
-      }
-    });
-
-    QUnit.test('`_.remove` should use `_.iteratee` internally', function(assert) {
-      assert.expect(1);
-
-      if (!isModularize) {
-        var objects = [{ 'a': 0 }, { 'a': 1 }];
-
-        _.iteratee = getPropA;
-        _.remove(objects);
-        assert.deepEqual(objects, [{ 'a': 0 }]);
-        _.iteratee = iteratee;
-      }
-      else {
-        skipAssert(assert);
-      }
-    });
-
-    QUnit.test('`_.some` should use `_.iteratee` internally', function(assert) {
-      assert.expect(1);
-
-      if (!isModularize) {
-        _.iteratee = getPropB;
-        assert.strictEqual(_.some(objects), true);
-        _.iteratee = iteratee;
-      }
-      else {
-        skipAssert(assert);
-      }
-    });
-
-    QUnit.test('`_.sortBy` should use `_.iteratee` internally', function(assert) {
-      assert.expect(1);
-
-      if (!isModularize) {
-        _.iteratee = getPropA;
-        assert.deepEqual(_.sortBy(objects.slice().reverse()), [objects[0], objects[2], objects[1]]);
-        _.iteratee = iteratee;
-      }
-      else {
-        skipAssert(assert);
-      }
-    });
-
-    QUnit.test('`_.sortedIndexBy` should use `_.iteratee` internally', function(assert) {
-      assert.expect(1);
-
-      if (!isModularize) {
-        var objects = [{ 'a': 30 }, { 'a': 50 }];
-
-        _.iteratee = getPropA;
-        assert.strictEqual(_.sortedIndexBy(objects, { 'a': 40 }), 1);
-        _.iteratee = iteratee;
-      }
-      else {
-        skipAssert(assert);
-      }
-    });
-
-    QUnit.test('`_.sortedLastIndexBy` should use `_.iteratee` internally', function(assert) {
-      assert.expect(1);
-
-      if (!isModularize) {
-        var objects = [{ 'a': 30 }, { 'a': 50 }];
-
-        _.iteratee = getPropA;
-        assert.strictEqual(_.sortedLastIndexBy(objects, { 'a': 40 }), 1);
-        _.iteratee = iteratee;
-      }
-      else {
-        skipAssert(assert);
-      }
-    });
-
-    QUnit.test('`_.sumBy` should use `_.iteratee` internally', function(assert) {
-      assert.expect(1);
-
-      if (!isModularize) {
-        _.iteratee = getPropB;
-        assert.strictEqual(_.sumBy(objects), 1);
-        _.iteratee = iteratee;
-      }
-      else {
-        skipAssert(assert);
-      }
-    });
-
-    QUnit.test('`_.takeRightWhile` should use `_.iteratee` internally', function(assert) {
-      assert.expect(1);
-
-      if (!isModularize) {
-        _.iteratee = getPropB;
-        assert.deepEqual(_.takeRightWhile(objects), objects.slice(2));
-        _.iteratee = iteratee;
-      }
-      else {
-        skipAssert(assert);
-      }
-    });
-
-    QUnit.test('`_.takeWhile` should use `_.iteratee` internally', function(assert) {
-      assert.expect(1);
-
-      if (!isModularize) {
-        _.iteratee = getPropB;
-        assert.deepEqual(_.takeWhile(objects.reverse()), objects.reverse().slice(2));
-        _.iteratee = iteratee;
-      }
-      else {
-        skipAssert(assert);
-      }
-    });
-
-    QUnit.test('`_.transform` should use `_.iteratee` internally', function(assert) {
-      assert.expect(1);
-
-      if (!isModularize) {
-        _.iteratee = function() {
-          return function(result, object) {
-            result.sum += object.a;
-          };
-        };
-
-        assert.deepEqual(_.transform(objects, undefined, { 'sum': 0 }), { 'sum': 2 });
-        _.iteratee = iteratee;
-      }
-      else {
-        skipAssert(assert);
-      }
-    });
-
-    QUnit.test('`_.uniqBy` should use `_.iteratee` internally', function(assert) {
-      assert.expect(1);
-
-      if (!isModularize) {
-        _.iteratee = getPropB;
-        assert.deepEqual(_.uniqBy(objects), [objects[0], objects[2]]);
-        _.iteratee = iteratee;
-      }
-      else {
-        skipAssert(assert);
-      }
-    });
-
-    QUnit.test('`_.unionBy` should use `_.iteratee` internally', function(assert) {
-      assert.expect(1);
-
-      if (!isModularize) {
-        _.iteratee = getPropB;
-        assert.deepEqual(_.unionBy(objects.slice(0, 1), [objects[2]]), [objects[0], objects[2]]);
-        _.iteratee = iteratee;
-      }
-      else {
-        skipAssert(assert);
-      }
-    });
-
-    QUnit.test('`_.xorBy` should use `_.iteratee` internally', function(assert) {
-      assert.expect(1);
-
-      if (!isModularize) {
-        _.iteratee = getPropA;
-        assert.deepEqual(_.xorBy(objects, objects.slice(1)), [objects[0]]);
-        _.iteratee = iteratee;
-      }
-      else {
-        skipAssert(assert);
-      }
-    });
-  }());
-
 
   /*--------------------------------------------------------------------------*/
 
@@ -10557,29 +9621,6 @@
       var actual = _.keyBy(array, function(object) {
         return String.fromCharCode(object.code);
       });
-
-      assert.deepEqual(actual, expected);
-    });
-
-    QUnit.test('should use `_.identity` when `iteratee` is nullish', function(assert) {
-      assert.expect(1);
-
-      var array = [4, 6, 6],
-          values = [, null, undefined],
-          expected = lodashStable.map(values, lodashStable.constant({ '4': 4, '6': 6 }));
-
-      var actual = lodashStable.map(values, function(value, index) {
-        return index ? _.keyBy(array, value) : _.keyBy(array);
-      });
-
-      assert.deepEqual(actual, expected);
-    });
-
-    QUnit.test('should work with `_.property` shorthands', function(assert) {
-      assert.expect(1);
-
-      var expected = { 'left': { 'dir': 'left', 'code': 97 }, 'right': { 'dir': 'right', 'code': 100 } },
-          actual = _.keyBy(array, 'dir');
 
       assert.deepEqual(actual, expected);
     });
@@ -11087,13 +10128,6 @@
       assert.deepEqual(_.map(object, String), expected);
     });
 
-    QUnit.test('should work with `_.property` shorthands', function(assert) {
-      assert.expect(1);
-
-      var objects = [{ 'a': 'x' }, { 'a': 'y' }];
-      assert.deepEqual(_.map(objects, 'a'), ['x', 'y']);
-    });
-
     QUnit.test('should iterate over own string keyed properties of objects', function(assert) {
       assert.expect(1);
 
@@ -11104,22 +10138,6 @@
 
       var actual = _.map(new Foo, identity);
       assert.deepEqual(actual, [1]);
-    });
-
-    QUnit.test('should use `_.identity` when `iteratee` is nullish', function(assert) {
-      assert.expect(2);
-
-      var object = { 'a': 1, 'b': 2 },
-          values = [, null, undefined],
-          expected = lodashStable.map(values, lodashStable.constant([1, 2]));
-
-      lodashStable.each([array, object], function(collection) {
-        var actual = lodashStable.map(values, function(value, index) {
-          return index ? _.map(collection, value) : _.map(collection);
-        });
-
-        assert.deepEqual(actual, expected);
-      });
     });
 
     QUnit.test('should accept a falsey `collection`', function(assert) {
@@ -11188,27 +10206,6 @@
       var actual = _.mapKeys(array, String);
       assert.deepEqual(actual, { '1': 1, '2': 2 });
     });
-
-    QUnit.test('should work with `_.property` shorthands', function(assert) {
-      assert.expect(1);
-
-      var actual = _.mapKeys({ 'a': { 'b': 'c' } }, 'b');
-      assert.deepEqual(actual, { 'c': { 'b': 'c' } });
-    });
-
-    QUnit.test('should use `_.identity` when `iteratee` is nullish', function(assert) {
-      assert.expect(1);
-
-      var object = { 'a': 1, 'b': 2 },
-          values = [, null, undefined],
-          expected = lodashStable.map(values, lodashStable.constant({ '1': 1, '2': 2 }));
-
-      var actual = lodashStable.map(values, function(value, index) {
-        return index ? _.mapKeys(object, value) : _.mapKeys(object);
-      });
-
-      assert.deepEqual(actual, expected);
-    });
   }());
 
   /*--------------------------------------------------------------------------*/
@@ -11231,28 +10228,6 @@
 
       var actual = _.mapValues(array, String);
       assert.deepEqual(actual, { '0': '1', '1': '2' });
-    });
-
-    QUnit.test('should work with `_.property` shorthands', function(assert) {
-      assert.expect(1);
-
-      var actual = _.mapValues({ 'a': { 'b': 2 } }, 'b');
-      assert.deepEqual(actual, { 'a': 2 });
-    });
-
-    QUnit.test('should use `_.identity` when `iteratee` is nullish', function(assert) {
-      assert.expect(1);
-
-      var object = { 'a': 1, 'b': 2 },
-          values = [, null, undefined],
-          expected = lodashStable.map(values, lodashStable.constant([true, false]));
-
-      var actual = lodashStable.map(values, function(value, index) {
-        var result = index ? _.mapValues(object, value) : _.mapValues(object);
-        return [lodashStable.isEqual(result, object), result === object];
-      });
-
-      assert.deepEqual(actual, expected);
     });
   }());
 
@@ -12170,14 +11145,6 @@
       });
 
       assert.deepEqual(args, [{ 'a': 2 }]);
-    });
-
-    QUnit.test('should work with `_.property` shorthands', function(assert) {
-      assert.expect(2);
-
-      var arrays = [[2], [3], [1]];
-      assert.strictEqual(_.meanBy(arrays, 0), 2);
-      assert.strictEqual(_.meanBy(objects, 'a'), 2);
     });
   }());
 
@@ -13257,20 +12224,6 @@
       assert.strictEqual(actual, isMax ? 1 : 3);
     });
 
-    QUnit.test('should work with `_.property` shorthands', function(assert) {
-      assert.expect(2);
-
-      var objects = [{ 'a': 2 }, { 'a': 3 }, { 'a': 1 }],
-          actual = func(objects, 'a');
-
-      assert.deepEqual(actual, objects[isMax ? 1 : 2]);
-
-      var arrays = [[2], [3], [1]];
-      actual = func(arrays, 0);
-
-      assert.deepEqual(actual, arrays[isMax ? 1 : 2]);
-    });
-
     QUnit.test('`_.' + methodName + '` should work when `iteratee` returns +/-Infinity', function(assert) {
       assert.expect(1);
 
@@ -13371,44 +12324,6 @@
 
       var over = _.overArgs(fn, doubled, square);
       assert.deepEqual(over(5, 10), [10, 100]);
-    });
-
-    QUnit.test('should use `_.identity` when a predicate is nullish', function(assert) {
-      assert.expect(1);
-
-      var over = _.overArgs(fn, undefined, null);
-      assert.deepEqual(over('a', 'b'), ['a', 'b']);
-    });
-
-    QUnit.test('should work with `_.property` shorthands', function(assert) {
-      assert.expect(1);
-
-      var over = _.overArgs(fn, 'b', 'a');
-      assert.deepEqual(over({ 'b': 2 }, { 'a': 1 }), [2, 1]);
-    });
-
-    QUnit.test('should work with `_.matches` shorthands', function(assert) {
-      assert.expect(1);
-
-      var over = _.overArgs(fn, { 'b': 1 }, { 'a': 1 });
-      assert.deepEqual(over({ 'b': 2 }, { 'a': 1 }), [false, true]);
-    });
-
-    QUnit.test('should work with `_.matchesProperty` shorthands', function(assert) {
-      assert.expect(1);
-
-      var over = _.overArgs(fn, [['b', 1], ['a', 1]]);
-      assert.deepEqual(over({ 'b': 2 }, { 'a': 1 }), [false, true]);
-    });
-
-    QUnit.test('should differentiate between `_.property` and `_.matchesProperty` shorthands', function(assert) {
-      assert.expect(2);
-
-      var over = _.overArgs(fn, ['a', 1]);
-      assert.deepEqual(over({ 'a': 1 }, { '1': 2 }), [1, 2]);
-
-      over = _.overArgs(fn, [['a', 1]]);
-      assert.deepEqual(over({ 'a': 1 }), [true]);
     });
 
     QUnit.test('should flatten `transforms`', function(assert) {
@@ -13808,50 +12723,6 @@
       assert.deepEqual(over(1, 2, 3, 4), [4, 1]);
     });
 
-    QUnit.test('should use `_.identity` when a predicate is nullish', function(assert) {
-      assert.expect(1);
-
-      var over = _.over(undefined, null);
-      assert.deepEqual(over('a', 'b', 'c'), ['a', 'a']);
-    });
-
-    QUnit.test('should work with `_.property` shorthands', function(assert) {
-      assert.expect(1);
-
-      var over = _.over('b', 'a');
-      assert.deepEqual(over({ 'a': 1, 'b': 2 }), [2, 1]);
-    });
-
-    QUnit.test('should work with `_.matches` shorthands', function(assert) {
-      assert.expect(1);
-
-      var over = _.over({ 'b': 1 }, { 'a': 1 });
-      assert.deepEqual(over({ 'a': 1, 'b': 2 }), [false, true]);
-    });
-
-    QUnit.test('should work with `_.matchesProperty` shorthands', function(assert) {
-      assert.expect(2);
-
-      var over = _.over([['b', 2], ['a', 2]]);
-
-      assert.deepEqual(over({ 'a': 1, 'b': 2 }), [true, false]);
-      assert.deepEqual(over({ 'a': 2, 'b': 1 }), [false, true]);
-    });
-
-    QUnit.test('should differentiate between `_.property` and `_.matchesProperty` shorthands', function(assert) {
-      assert.expect(4);
-
-      var over = _.over(['a', 1]);
-
-      assert.deepEqual(over({ 'a': 1, '1': 2 }), [1, 2]);
-      assert.deepEqual(over({ 'a': 2, '1': 1 }), [2, 1]);
-
-      over = _.over([['a', 1]]);
-
-      assert.deepEqual(over({ 'a': 1 }), [true]);
-      assert.deepEqual(over({ 'a': 2 }), [false]);
-    });
-
     QUnit.test('should provide arguments to predicates', function(assert) {
       assert.expect(1);
 
@@ -13894,57 +12765,6 @@
 
       assert.strictEqual(over(), false);
       assert.strictEqual(count, 2);
-    });
-
-    QUnit.test('should use `_.identity` when a predicate is nullish', function(assert) {
-      assert.expect(2);
-
-      var over = _.overEvery(undefined, null);
-
-      assert.strictEqual(over(true), true);
-      assert.strictEqual(over(false), false);
-    });
-
-    QUnit.test('should work with `_.property` shorthands', function(assert) {
-      assert.expect(2);
-
-      var over = _.overEvery('b', 'a');
-
-      assert.strictEqual(over({ 'a': 1, 'b': 1 }), true);
-      assert.strictEqual(over({ 'a': 0, 'b': 1 }), false);
-    });
-
-    QUnit.test('should work with `_.matches` shorthands', function(assert) {
-      assert.expect(2);
-
-      var over = _.overEvery({ 'b': 2 }, { 'a': 1 });
-
-      assert.strictEqual(over({ 'a': 1, 'b': 2 }), true);
-      assert.strictEqual(over({ 'a': 0, 'b': 2 }), false);
-    });
-
-    QUnit.test('should work with `_.matchesProperty` shorthands', function(assert) {
-      assert.expect(2);
-
-      var over = _.overEvery([['b', 2], ['a', 1]]);
-
-      assert.strictEqual(over({ 'a': 1, 'b': 2 }), true);
-      assert.strictEqual(over({ 'a': 0, 'b': 2 }), false);
-    });
-
-    QUnit.test('should differentiate between `_.property` and `_.matchesProperty` shorthands', function(assert) {
-      assert.expect(5);
-
-      var over = _.overEvery(['a', 1]);
-
-      assert.strictEqual(over({ 'a': 1, '1': 1 }), true);
-      assert.strictEqual(over({ 'a': 1, '1': 0 }), false);
-      assert.strictEqual(over({ 'a': 0, '1': 1 }), false);
-
-      over = _.overEvery([['a', 1]]);
-
-      assert.strictEqual(over({ 'a': 1 }), true);
-      assert.strictEqual(over({ 'a': 2 }), false);
     });
 
     QUnit.test('should flatten `predicates`', function(assert) {
@@ -14015,57 +12835,6 @@
 
       over = _.overSome(stubNull, stubZero, stubString);
       assert.strictEqual(over(), false);
-    });
-
-    QUnit.test('should use `_.identity` when a predicate is nullish', function(assert) {
-      assert.expect(2);
-
-      var over = _.overSome(undefined, null);
-
-      assert.strictEqual(over(true), true);
-      assert.strictEqual(over(false), false);
-    });
-
-    QUnit.test('should work with `_.property` shorthands', function(assert) {
-      assert.expect(2);
-
-      var over = _.overSome('b', 'a');
-
-      assert.strictEqual(over({ 'a': 1, 'b': 0 }), true);
-      assert.strictEqual(over({ 'a': 0, 'b': 0 }), false);
-    });
-
-    QUnit.test('should work with `_.matches` shorthands', function(assert) {
-      assert.expect(2);
-
-      var over = _.overSome({ 'b': 2 }, { 'a': 1 });
-
-      assert.strictEqual(over({ 'a': 0, 'b': 2 }), true);
-      assert.strictEqual(over({ 'a': 0, 'b': 0 }), false);
-    });
-
-    QUnit.test('should work with `_.matchesProperty` shorthands', function(assert) {
-      assert.expect(2);
-
-      var over = _.overSome([['b', 2], ['a', 1]]);
-
-      assert.strictEqual(over({ 'a': 0, 'b': 2 }), true);
-      assert.strictEqual(over({ 'a': 0, 'b': 0 }), false);
-    });
-
-    QUnit.test('should differentiate between `_.property` and `_.matchesProperty` shorthands', function(assert) {
-      assert.expect(5);
-
-      var over = _.overSome(['a', 1]);
-
-      assert.strictEqual(over({ 'a': 0, '1': 0 }), false);
-      assert.strictEqual(over({ 'a': 1, '1': 0 }), true);
-      assert.strictEqual(over({ 'a': 0, '1': 1 }), true);
-
-      over = _.overSome([['a', 1]]);
-
-      assert.strictEqual(over({ 'a': 1 }), true);
-      assert.strictEqual(over({ 'a': 2 }), false);
     });
 
     QUnit.test('should flatten `predicates`', function(assert) {
@@ -14394,41 +13163,6 @@
       assert.deepEqual(_.partition([], identity), [[], []]);
       assert.deepEqual(_.partition(array, stubTrue), [array, []]);
       assert.deepEqual(_.partition(array, stubFalse), [[], array]);
-    });
-
-    QUnit.test('should use `_.identity` when `predicate` is nullish', function(assert) {
-      assert.expect(1);
-
-      var values = [, null, undefined],
-          expected = lodashStable.map(values, lodashStable.constant([[1, 1], [0]]));
-
-      var actual = lodashStable.map(values, function(value, index) {
-        return index ? _.partition(array, value) : _.partition(array);
-      });
-
-      assert.deepEqual(actual, expected);
-    });
-
-    QUnit.test('should work with `_.property` shorthands', function(assert) {
-      assert.expect(1);
-
-      var objects = [{ 'a': 1 }, { 'a': 1 }, { 'b': 2 }],
-          actual = _.partition(objects, 'a');
-
-      assert.deepEqual(actual, [objects.slice(0, 2), objects.slice(2)]);
-    });
-
-    QUnit.test('should work with a number for `predicate`', function(assert) {
-      assert.expect(2);
-
-      var array = [
-        [1, 0],
-        [0, 1],
-        [1, 0]
-      ];
-
-      assert.deepEqual(_.partition(array, 0), [[array[0], array[2]], [array[1]]]);
-      assert.deepEqual(_.partition(array, 1), [[array[1]], [array[0], array[2]]]);
     });
 
     QUnit.test('should work with an object for `collection`', function(assert) {
@@ -15717,18 +14451,6 @@
       assert.deepEqual(actual, [0]);
     });
 
-    QUnit.test('`_.' + methodName + '` should work with `_.property` shorthands', function(assert) {
-      assert.expect(1);
-
-      assert.deepEqual(func(objects, 'a'), [objects[isFilter ? 1 : 0]]);
-    });
-
-    QUnit.test('`_.' + methodName + '` should work with `_.matches` shorthands', function(assert) {
-      assert.expect(1);
-
-      assert.deepEqual(func(objects, objects[1]), [objects[isFilter ? 1 : 0]]);
-    });
-
     QUnit.test('`_.' + methodName + '` should not modify wrapped values', function(assert) {
       assert.expect(2);
 
@@ -15783,30 +14505,6 @@
       });
 
       assert.deepEqual(argsList, [[1, 0, clone], [2, 1, clone], [3, 2, clone]]);
-    });
-
-    QUnit.test('should work with `_.matches` shorthands', function(assert) {
-      assert.expect(1);
-
-      var objects = [{ 'a': 0, 'b': 1 }, { 'a': 1, 'b': 2 }];
-      _.remove(objects, { 'a': 1 });
-      assert.deepEqual(objects, [{ 'a': 0, 'b': 1 }]);
-    });
-
-    QUnit.test('should work with `_.matchesProperty` shorthands', function(assert) {
-      assert.expect(1);
-
-      var objects = [{ 'a': 0, 'b': 1 }, { 'a': 1, 'b': 2 }];
-      _.remove(objects, ['a', 1]);
-      assert.deepEqual(objects, [{ 'a': 0, 'b': 1 }]);
-    });
-
-    QUnit.test('should work with `_.property` shorthands', function(assert) {
-      assert.expect(1);
-
-      var objects = [{ 'a': 0 }, { 'a': 1 }];
-      _.remove(objects, 'a');
-      assert.deepEqual(objects, [{ 'a': 0 }]);
     });
 
     QUnit.test('should preserve holes in arrays', function(assert) {
@@ -17021,44 +15719,6 @@
       assert.strictEqual(_.some([null, 0, ''], identity), false);
     });
 
-    QUnit.test('should use `_.identity` when `predicate` is nullish', function(assert) {
-      assert.expect(2);
-
-      var values = [, null, undefined],
-          expected = lodashStable.map(values, stubFalse);
-
-      var actual = lodashStable.map(values, function(value, index) {
-        var array = [0, 0];
-        return index ? _.some(array, value) : _.some(array);
-      });
-
-      assert.deepEqual(actual, expected);
-
-      expected = lodashStable.map(values, stubTrue);
-      actual = lodashStable.map(values, function(value, index) {
-        var array = [0, 1];
-        return index ? _.some(array, value) : _.some(array);
-      });
-
-      assert.deepEqual(actual, expected);
-    });
-
-    QUnit.test('should work with `_.property` shorthands', function(assert) {
-      assert.expect(2);
-
-      var objects = [{ 'a': 0, 'b': 0 }, { 'a': 0, 'b': 1 }];
-      assert.strictEqual(_.some(objects, 'a'), false);
-      assert.strictEqual(_.some(objects, 'b'), true);
-    });
-
-    QUnit.test('should work with `_.matches` shorthands', function(assert) {
-      assert.expect(2);
-
-      var objects = [{ 'a': 0, 'b': 0 }, { 'a': 1, 'b': 1}];
-      assert.strictEqual(_.some(objects, { 'a': 0 }), true);
-      assert.strictEqual(_.some(objects, { 'b': 2 }), false);
-    });
-
     QUnit.test('should work as an iteratee for methods like `_.map`', function(assert) {
       assert.expect(1);
 
@@ -17276,15 +15936,6 @@
       });
 
       assert.deepEqual(args, [40]);
-    });
-
-    QUnit.test('`_.' + methodName + '` should work with `_.property` shorthands', function(assert) {
-      assert.expect(1);
-
-      var objects = [{ 'x': 30 }, { 'x': 50 }],
-          actual = func(objects, { 'x': 40 }, 'x');
-
-      assert.strictEqual(actual, 1);
     });
 
     QUnit.test('`_.' + methodName + '` should support arrays larger than `MAX_ARRAY_LENGTH / 2`', function(assert) {
@@ -17646,14 +16297,6 @@
 
       assert.deepEqual(args, [6]);
     });
-
-    QUnit.test('should work with `_.property` shorthands', function(assert) {
-      assert.expect(2);
-
-      var arrays = [[2], [3], [1]];
-      assert.strictEqual(_.sumBy(arrays, 0), 6);
-      assert.strictEqual(_.sumBy(objects, 'a'), 6);
-    });
   }());
 
   /*--------------------------------------------------------------------------*/
@@ -17884,24 +16527,6 @@
 
       assert.deepEqual(args, [4, 3, array]);
     });
-
-    QUnit.test('should work with `_.matches` shorthands', function(assert) {
-      assert.expect(1);
-
-      assert.deepEqual(_.takeRightWhile(objects, { 'b': 2 }), objects.slice(2));
-    });
-
-    QUnit.test('should work with `_.matchesProperty` shorthands', function(assert) {
-      assert.expect(1);
-
-      assert.deepEqual(_.takeRightWhile(objects, ['b', 2]), objects.slice(2));
-    });
-
-    QUnit.test('should work with `_.property` shorthands', function(assert) {
-      assert.expect(1);
-
-      assert.deepEqual(_.takeRightWhile(objects, 'b'), objects.slice(1));
-    });
   }());
 
   /*--------------------------------------------------------------------------*/
@@ -17937,23 +16562,6 @@
       });
 
       assert.deepEqual(args, [1, 0, array]);
-    });
-
-    QUnit.test('should work with `_.matches` shorthands', function(assert) {
-      assert.expect(1);
-
-      assert.deepEqual(_.takeWhile(objects, { 'b': 2 }), objects.slice(0, 1));
-    });
-
-    QUnit.test('should work with `_.matchesProperty` shorthands', function(assert) {
-      assert.expect(1);
-
-      assert.deepEqual(_.takeWhile(objects, ['b', 2]), objects.slice(0, 1));
-    });
-    QUnit.test('should work with `_.property` shorthands', function(assert) {
-      assert.expect(1);
-
-      assert.deepEqual(_.takeWhile(objects, 'b'), objects.slice(0, 2));
     });
   }());
 
@@ -18532,7 +17140,7 @@
     QUnit.test('should coerce `n` to an integer', function(assert) {
       assert.expect(1);
 
-      var actual = _.times(2.6, _.identity);
+      var actual = _.times(2.6, lodashStable.identity);
       assert.deepEqual(actual, [0, 1]);
     });
 
@@ -18546,19 +17154,6 @@
       });
 
       assert.deepEqual(args, [0]);
-    });
-
-    QUnit.test('should use `_.identity` when `iteratee` is nullish', function(assert) {
-      assert.expect(1);
-
-      var values = [, null, undefined],
-          expected = lodashStable.map(values, lodashStable.constant([0, 1, 2]));
-
-      var actual = lodashStable.map(values, function(value, index) {
-        return index ? _.times(3, value) : _.times(3);
-      });
-
-      assert.deepEqual(actual, expected);
     });
 
     QUnit.test('should return an array of the results of each `iteratee` execution', function(assert) {
@@ -20182,24 +18777,6 @@
       });
 
       assert.deepEqual(args, [objects[0]]);
-    });
-
-    QUnit.test('`_.' + methodName + '` should work with `_.property` shorthands', function(assert) {
-      assert.expect(2);
-
-      var expected = isSorted ? [{ 'a': 1 }, { 'a': 2 }, { 'a': 3 }] : objects.slice(0, 3),
-          actual = func(objects, 'a');
-
-      assert.deepEqual(actual, expected);
-
-      var arrays = [[2], [3], [1], [2], [3], [1]];
-      if (isSorted) {
-        arrays = lodashStable.sortBy(arrays, 0);
-      }
-      expected = isSorted ? [[1], [2], [3]] : arrays.slice(0, 3);
-      actual = func(arrays, 0);
-
-      assert.deepEqual(actual, expected);
     });
 
     lodashStable.each({

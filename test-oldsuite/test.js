@@ -2734,22 +2734,22 @@
     QUnit.test('should accept a falsey `prototype`', function(assert) {
       assert.expect(1);
 
-      var expected = lodashStable.map(falsey, stubObject);
+      var expected = lodashStable.map(falsey, stubTrue);
 
       var actual = lodashStable.map(falsey, function(prototype, index) {
-        return index ? _.create(prototype) : _.create();
+        return lodashStable.isObject(index ? _.create(prototype) : _.create());
       });
 
       assert.deepEqual(actual, expected);
     });
 
-    QUnit.test('should ignore a primitive `prototype` and use an empty object instead', function(assert) {
+    QUnit.test('should accept a primitive `prototype`', function(assert) {
       assert.expect(1);
 
       var expected = lodashStable.map(primitives, stubTrue);
 
       var actual = lodashStable.map(primitives, function(value, index) {
-        return lodashStable.isPlainObject(index ? _.create(value) : _.create());
+        return lodashStable.isObject(index ? _.create(value) : _.create());
       });
 
       assert.deepEqual(actual, expected);

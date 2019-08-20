@@ -1806,13 +1806,6 @@
 
       assert.deepEqual(_.chunk(array, array.length / 4), [[0], [1], [2], [3], [4], [5]]);
     });
-
-    QUnit.test('should work as an iteratee for methods like `_.map`', function(assert) {
-      assert.expect(1);
-
-      var actual = lodashStable.map([[1, 2], [3, 4]], _.chunk);
-      assert.deepEqual(actual, [[[1], [2]], [[3], [4]]]);
-    });
   }());
 
   /*--------------------------------------------------------------------------*/
@@ -2258,21 +2251,6 @@
         });
 
         assert.deepEqual(actual, expected, props.join(', '));
-      });
-
-      QUnit.test('`_.' + methodName + '` should perform a ' + (isDeep ? 'deep' : 'shallow') + ' clone when used as an iteratee for methods like `_.map`', function(assert) {
-        assert.expect(2);
-
-        var expected = [{ 'a': [0] }, { 'b': [1] }],
-            actual = lodashStable.map(expected, func);
-
-        assert.deepEqual(actual, expected);
-
-        if (isDeep) {
-          assert.ok(actual[0] !== expected[0] && actual[0].a !== expected[0].a && actual[1].b !== expected[1].b);
-        } else {
-          assert.ok(actual[0] !== expected[0] && actual[0].a === expected[0].a && actual[1].b === expected[1].b);
-        }
       });
 
       lodashStable.each(arrayViews, function(type) {
@@ -3703,15 +3681,6 @@
       assert.expect(1);
 
       assert.deepEqual(_.drop(array, 1.6), [2, 3]);
-    });
-
-    QUnit.test('should work as an iteratee for methods like `_.map`', function(assert) {
-      assert.expect(1);
-
-      var array = [[1, 2, 3], [4, 5, 6], [7, 8, 9]],
-          actual = lodashStable.map(array, _.drop);
-
-      assert.deepEqual(actual, [[2, 3], [5, 6], [8, 9]]);
     });
   }());
 

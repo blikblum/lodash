@@ -1307,24 +1307,6 @@
       assert.deepEqual(actual, lodashStable.map(strings, stubTrue));
     });
 
-    QUnit.test('`_.' + methodName + '` should deburr letters', function(assert) {
-      assert.expect(1);
-
-      var actual = lodashStable.map(burredLetters, function(burred, index) {
-        var letter = deburredLetters[index].replace(/['\u2019]/g, '');
-        if (caseName == 'start') {
-          letter = letter == 'IJ' ? letter : lodashStable.capitalize(letter);
-        } else if (caseName == 'upper') {
-          letter = letter.toUpperCase();
-        } else {
-          letter = letter.toLowerCase();
-        }
-        return func(burred) === letter;
-      });
-
-      assert.deepEqual(actual, lodashStable.map(burredLetters, stubTrue));
-    });
-
     QUnit.test('`_.' + methodName + '` should remove contraction apostrophes', function(assert) {
       assert.expect(2);
 

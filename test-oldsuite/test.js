@@ -4394,30 +4394,22 @@
 
   (function() {
     var methods = [
-      '_baseEach',
       'countBy',
       'every',
       'filter',
-      'find',
-      'findIndex',
       'findKey',
       'findLast',
       'findLastIndex',
       'findLastKey',
       'forEach',
       'forEachRight',
-      'forIn',
-      'forInRight',
       'forOwn',
       'forOwnRight',
       'groupBy',
       'keyBy',
       'map',
-      'mapKeys',
-      'mapValues',
       'maxBy',
       'minBy',
-      'omitBy',
       'partition',
       'pickBy',
       'reject',
@@ -4425,18 +4417,15 @@
     ];
 
     var arrayMethods = [
-      'findIndex',
       'findLastIndex',
+      'filter',
       'maxBy',
       'minBy'
     ];
 
     var collectionMethods = [
-      '_baseEach',
       'countBy',
       'every',
-      'filter',
-      'find',
       'findLast',
       'forEach',
       'forEachRight',
@@ -4446,37 +4435,23 @@
       'partition',
       'reduce',
       'reduceRight',
-      'reject',
-      'some'
+      'reject'
     ];
 
     var forInMethods = [
-      'forIn',
-      'forInRight',
-      'omitBy',
       'pickBy'
     ];
 
     var iterationMethods = [
-      '_baseEach',
       'forEach',
-      'forEachRight',
-      'forIn',
-      'forInRight',
-      'forOwn',
-      'forOwnRight'
+      'forEachRight'
     ];
 
     var objectMethods = [
       'findKey',
       'findLastKey',
-      'forIn',
-      'forInRight',
       'forOwn',
       'forOwnRight',
-      'mapKeys',
-      'mapValues',
-      'omitBy',
       'pickBy'
     ];
 
@@ -4848,7 +4823,7 @@
     });
   });
 
-  lodashStable.each(['assignWith', 'assignInWith', 'mergeWith'], function(methodName) {
+  lodashStable.each(['mergeWith'], function(methodName) {
     var func = _[methodName],
         isMergeWith = methodName == 'mergeWith';
 
@@ -4913,7 +4888,7 @@
 
   QUnit.module('exit early');
 
-  lodashStable.each(['_baseEach', 'forEach', 'forEachRight', 'forIn', 'forInRight', 'forOwn', 'forOwnRight', 'transform'], function(methodName) {
+  lodashStable.each(['forEach', 'forEachRight', 'forOwn', 'forOwnRight', 'transform'], function(methodName) {
     var func = _[methodName];
 
     QUnit.test('`_.' + methodName + '` can exit early when iterating arrays', function(assert) {
@@ -4981,8 +4956,6 @@
       assert.expect(2);
 
       var methods = [
-        'assign',
-        'assignIn',
         'defaults',
         'defaultsDeep',
         'merge'
@@ -7374,7 +7347,7 @@
       assert.expect(1);
 
       var array = [1, 2, 3],
-          eq = _.partial(_.isEqualWith, array),
+          eq = lodashStable.partial(_.isEqualWith, array),
           actual = lodashStable.map([array, [1, 0, 3]], eq);
 
       assert.deepEqual(actual, [true, false]);
@@ -7899,7 +7872,7 @@
       assert.expect(1);
 
       var object = { 'a': 1 },
-          matches = _.partial(_.isMatchWith, object),
+          matches = lodashStable.partial(_.isMatchWith, object),
           actual = lodashStable.map([object, { 'a': 2 }], matches);
 
       assert.deepEqual(actual, [true, false]);
@@ -15551,39 +15524,6 @@
 
   /*--------------------------------------------------------------------------*/
 
-  QUnit.module('stub methods');
-
-  lodashStable.each(['noop', 'stubTrue', 'stubFalse', 'stubArray', 'stubObject', 'stubString'], function(methodName) {
-    var func = _[methodName];
-
-    var pair = ({
-      'stubArray': [[], 'an empty array'],
-      'stubFalse': [false, '`false`'],
-      'stubObject': [{}, 'an empty object'],
-      'stubString': ['', 'an empty string'],
-      'stubTrue': [true, '`true`'],
-      'noop': [undefined, '`undefined`']
-    })[methodName];
-
-    var values = Array(2).concat(empties, true, 1, 'a'),
-        expected = lodashStable.map(values, lodashStable.constant(pair[0]));
-
-    QUnit.test('`_.' + methodName + '` should return ' + pair[1], function(assert) {
-      assert.expect(1);
-
-      var actual = lodashStable.map(values, function(value, index) {
-        if (index < 2) {
-          return index ? func.call({}) : func();
-        }
-        return func(value);
-      });
-
-      assert.deepEqual(actual, expected);
-    });
-  });
-
-  /*--------------------------------------------------------------------------*/
-
   QUnit.module('lodash.subtract');
 
   (function() {
@@ -16618,39 +16558,12 @@
 
   }());
 
-  /*--------------------------------------------------------------------------*/
-
-  QUnit.module('lodash.toLower');
-
-  (function() {
-    QUnit.test('should convert whole string to lower case', function(assert) {
-      assert.expect(3);
-
-      assert.deepEqual(_.toLower('--Foo-Bar--'), '--foo-bar--');
-      assert.deepEqual(_.toLower('fooBar'), 'foobar');
-      assert.deepEqual(_.toLower('__FOO_BAR__'), '__foo_bar__');
-    });
-  }());
 
   /*--------------------------------------------------------------------------*/
 
-  QUnit.module('lodash.toUpper');
+  QUnit.module('lodash.toArray');
 
-  (function() {
-    QUnit.test('should convert whole string to upper case', function(assert) {
-      assert.expect(3);
-
-      assert.deepEqual(_.toUpper('--Foo-Bar'), '--FOO-BAR');
-      assert.deepEqual(_.toUpper('fooBar'), 'FOOBAR');
-      assert.deepEqual(_.toUpper('__FOO_BAR__'), '__FOO_BAR__');
-    });
-  }());
-
-  /*--------------------------------------------------------------------------*/
-
-  QUnit.module('lodash.slice and lodash.toArray');
-
-  lodashStable.each(['slice', 'toArray'], function(methodName) {
+  lodashStable.each(['toArray'], function(methodName) {
     var array = [1, 2, 3],
         func = _[methodName];
 
@@ -17014,107 +16927,6 @@
     });
   });
 
-  /*--------------------------------------------------------------------------*/
-
-  QUnit.module('lodash.toPairs');
-
-  (function() {
-    QUnit.test('should be aliased', function(assert) {
-      assert.expect(1);
-
-      assert.strictEqual(_.entries, _.toPairs);
-    });
-  }());
-
-  /*--------------------------------------------------------------------------*/
-
-  QUnit.module('lodash.toPairsIn');
-
-  (function() {
-    QUnit.test('should be aliased', function(assert) {
-      assert.expect(1);
-
-      assert.strictEqual(_.entriesIn, _.toPairsIn);
-    });
-  }());
-
-  /*--------------------------------------------------------------------------*/
-
-  QUnit.module('toPairs methods');
-
-  lodashStable.each(['toPairs', 'toPairsIn'], function(methodName) {
-    var func = _[methodName],
-        isToPairs = methodName == 'toPairs';
-
-    QUnit.test('`_.' + methodName + '` should create an array of string keyed-value pairs', function(assert) {
-      assert.expect(1);
-
-      var object = { 'a': 1, 'b': 2 },
-          actual = lodashStable.sortBy(func(object), 0);
-
-      assert.deepEqual(actual, [['a', 1], ['b', 2]]);
-    });
-
-    QUnit.test('`_.' + methodName + '` should ' + (isToPairs ? 'not ' : '') + 'include inherited string keyed property values', function(assert) {
-      assert.expect(1);
-
-      function Foo() {
-        this.a = 1;
-      }
-      Foo.prototype.b = 2;
-
-      var expected = isToPairs ? [['a', 1]] : [['a', 1], ['b', 2]],
-          actual = lodashStable.sortBy(func(new Foo), 0);
-
-      assert.deepEqual(actual, expected);
-    });
-
-    QUnit.test('`_.' + methodName + '` should convert objects with a `length` property', function(assert) {
-      assert.expect(1);
-
-      var object = { '0': 'a', '1': 'b', 'length': 2 },
-          actual = lodashStable.sortBy(func(object), 0);
-
-      assert.deepEqual(actual, [['0', 'a'], ['1', 'b'], ['length', 2]]);
-    });
-
-    QUnit.test('`_.' + methodName + '` should convert maps', function(assert) {
-      assert.expect(1);
-
-      if (Map) {
-        var map = new Map;
-        map.set('a', 1);
-        map.set('b', 2);
-        assert.deepEqual(func(map), [['a', 1], ['b', 2]]);
-      }
-      else {
-        skipAssert(assert);
-      }
-    });
-
-    QUnit.test('`_.' + methodName + '` should convert sets', function(assert) {
-      assert.expect(1);
-
-      if (Set) {
-        var set = new Set;
-        set.add(1);
-        set.add(2);
-        assert.deepEqual(func(set), [[1, 1], [2, 2]]);
-      }
-      else {
-        skipAssert(assert);
-      }
-    });
-
-    QUnit.test('`_.' + methodName + '` should convert strings', function(assert) {
-      assert.expect(2);
-
-      lodashStable.each(['xo', Object('xo')], function(string) {
-        var actual = lodashStable.sortBy(func(string), 0);
-        assert.deepEqual(actual, [['0', 'x'], ['1', 'o']]);
-      });
-    });
-  });
 
   /*--------------------------------------------------------------------------*/
 
@@ -17292,18 +17104,6 @@
         } catch (e) {
           assert.ok(false, e.message);
         }
-      }
-      else {
-        skipAssert(assert);
-      }
-    });
-
-    QUnit.test('should return the `toString` result of the wrapped value', function(assert) {
-      assert.expect(1);
-
-      if (!isNpm) {
-        var wrapped = _([1, 2, 3]);
-        assert.strictEqual(wrapped.toString(), '1,2,3');
       }
       else {
         skipAssert(assert);
@@ -17596,16 +17396,6 @@
       assert.strictEqual(func(string, undefined), expected);
       assert.strictEqual(func(string, ''), string);
     });
-
-    QUnit.test('`_.' + methodName + '` should work as an iteratee for methods like `_.map`', function(assert) {
-      assert.expect(1);
-
-      var string = Object(whitespace + 'a b c' + whitespace),
-          trimmed = (index == 2 ? whitespace : '') + 'a b c' + (index == 1 ? whitespace : ''),
-          actual = lodashStable.map([string, string, string], func);
-
-      assert.deepEqual(actual, [trimmed, trimmed, trimmed]);
-    });
   });
 
   /*--------------------------------------------------------------------------*/
@@ -17783,39 +17573,6 @@
 
   /*--------------------------------------------------------------------------*/
 
-  QUnit.module('lodash.unary');
-
-  (function() {
-    function fn() {
-      return slice.call(arguments);
-    }
-
-    QUnit.test('should cap the number of arguments provided to `func`', function(assert) {
-      assert.expect(1);
-
-      var actual = lodashStable.map(['6', '8', '10'], _.unary(parseInt));
-      assert.deepEqual(actual, [6, 8, 10]);
-    });
-
-    QUnit.test('should not force a minimum argument count', function(assert) {
-      assert.expect(1);
-
-      var capped = _.unary(fn);
-      assert.deepEqual(capped(), []);
-    });
-
-    QUnit.test('should use `this` binding of function', function(assert) {
-      assert.expect(1);
-
-      var capped = _.unary(function(a, b) { return this; }),
-          object = { 'capped': capped };
-
-      assert.strictEqual(object.capped(), object);
-    });
-  }());
-
-  /*--------------------------------------------------------------------------*/
-
   QUnit.module('lodash.unescape');
 
   (function() {
@@ -17902,13 +17659,10 @@
 
   (function() {
     QUnit.test('should accept an `iteratee`', function(assert) {
-      assert.expect(2);
+      assert.expect(1);
 
       var actual = _.unionBy([2.1], [1.2, 2.3], Math.floor);
       assert.deepEqual(actual, [2.1, 1.2]);
-
-      actual = _.unionBy([{ 'x': 1 }], [{ 'x': 2 }, { 'x': 1 }], 'x');
-      assert.deepEqual(actual, [{ 'x': 1 }, { 'x': 2 }]);
     });
 
     QUnit.test('should provide correct `iteratee` arguments', function(assert) {
@@ -17926,7 +17680,7 @@
     QUnit.test('should output values from the first possible array', function(assert) {
       assert.expect(1);
 
-      var actual = _.unionBy([{ 'x': 1, 'y': 1 }], [{ 'x': 1, 'y': 2 }], 'x');
+      var actual = _.unionBy([{ 'x': 1, 'y': 1 }], [{ 'x': 1, 'y': 2 }], function(value) {return value.x});
       assert.deepEqual(actual, [{ 'x': 1, 'y': 1 }]);
     });
   }());
@@ -18170,21 +17924,6 @@
       });
 
       assert.deepEqual(args, [objects[0]]);
-    });
-
-    lodashStable.each({
-      'an array': [0, 'a'],
-      'an object': { '0': 'a' },
-      'a number': 0,
-      'a string': '0'
-    },
-    function(iteratee, key) {
-      QUnit.test('`_.' + methodName + '` should work with ' + key + ' for `iteratee`', function(assert) {
-        assert.expect(1);
-
-        var actual = func([['a'], ['a'], ['b']], iteratee);
-        assert.deepEqual(actual, [['a'], ['b']]);
-      });
     });
   });
 
@@ -18519,7 +18258,7 @@
 
   QUnit.module('values methods');
 
-  lodashStable.each(['values', 'valuesIn'], function(methodName) {
+  lodashStable.each(['values'], function(methodName) {
     var func = _[methodName],
         isValues = methodName == 'values';
 
@@ -19122,8 +18861,6 @@
       'padStart',
       'repeat',
       'snakeCase',
-      'toLower',
-      'toUpper',
       'trim',
       'trimEnd',
       'trimStart',
@@ -19172,13 +18909,8 @@
       'memoize',
       'negate',
       'once',
-      'partial',
-      'partialRight',
-      'rearg',
-      'rest',
-      'spread',
-      'throttle',
-      'unary'
+      'rearg',      
+      'throttle'      
     ];
 
     var noBinding = [
@@ -19186,18 +18918,11 @@
       'memoize',
       'negate',
       'once',
-      'overArgs',
-      'partial',
-      'partialRight',
-      'rearg',
-      'rest',
-      'spread'
+      'overArgs',      
+      'rearg'      
     ];
 
-    var rejectFalsey = [
-      'tap',
-      'thru'
-    ].concat(checkFuncs);
+    var rejectFalsey = [].concat(checkFuncs);
 
     var returnArrays = [
       'at',
@@ -19323,10 +19048,10 @@
             object = { 'a': 1 },
             expected = isNegate ? false : 1;
 
-        var wrapper = func(_.bind(fn, object));
+        var wrapper = func(fn.bind(object));
         assert.strictEqual(wrapper(), expected, '`_.' + methodName + '` can consume a bound function');
 
-        wrapper = _.bind(func(fn), object);
+        wrapper = func(fn).bind(object);
         assert.strictEqual(wrapper(), expected, '`_.' + methodName + '` can be bound');
 
         object.wrapper = func(fn);

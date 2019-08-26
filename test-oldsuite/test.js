@@ -15251,7 +15251,7 @@
         [NaN, symbol1, null, 1, '2', {}, symbol2, NaN, undefined],
         ['2', null, 1, symbol1, NaN, {}, NaN, symbol2, undefined]
       ], function(array) {
-        assert.deepEqual(_.sortBy(array), expected);
+        assert.deepEqual(lodashStable.sortBy(array), expected);
         assert.strictEqual(func(expected, 3), 2);
         assert.strictEqual(func(expected, symbol3), isSortedIndex ? 3 : (Symbol ? 5 : 6));
         assert.strictEqual(func(expected, null), isSortedIndex ? (Symbol ? 5 : 3) : 6);
@@ -15643,7 +15643,7 @@
     QUnit.test('`_.' + methodName + '` should return the sum of an array of numbers', function(assert) {
       assert.expect(1);
 
-      assert.strictEqual(func(array), 12);
+      assert.strictEqual(func(array, lodashStable.identity), 12);
     });
 
     QUnit.test('`_.' + methodName + '` should return `0` when passing empty `array` values', function(assert) {
@@ -15652,7 +15652,7 @@
       var expected = lodashStable.map(empties, stubZero);
 
       var actual = lodashStable.map(empties, function(value) {
-        return func(value);
+        return func(value, lodashStable.identity);
       });
 
       assert.deepEqual(actual, expected);
@@ -15661,19 +15661,19 @@
     QUnit.test('`_.' + methodName + '` should skip `undefined` values', function(assert) {
       assert.expect(1);
 
-      assert.strictEqual(func([1, undefined]), 1);
+      assert.strictEqual(func([1, undefined], lodashStable.identity), 1);
     });
 
     QUnit.test('`_.' + methodName + '` should not skip `NaN` values', function(assert) {
       assert.expect(1);
 
-      assert.deepEqual(func([1, NaN]), NaN);
+      assert.deepEqual(func([1, NaN], lodashStable.identity), NaN);
     });
 
     QUnit.test('`_.' + methodName + '` should not coerce values to numbers', function(assert) {
       assert.expect(1);
 
-      assert.strictEqual(func(['1', '2']), '12');
+      assert.strictEqual(func(['1', '2'], lodashStable.identity), '12');
     });
   });
 

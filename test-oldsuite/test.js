@@ -8035,7 +8035,7 @@
       }
     });
 
-    QUnit.test('should throw an error if core-js is detected', function(assert) {
+    QUnit.skip('should throw an error if core-js is detected', function(assert) {
       assert.expect(1);
 
       if (!isModularize) {
@@ -11831,59 +11831,6 @@
       });
 
       assert.deepEqual(actual, expected);
-    });
-  }());
-
-  /*--------------------------------------------------------------------------*/
-
-  QUnit.module('lodash.noConflict');
-
-  (function() {
-    QUnit.test('should return the `lodash` function', function(assert) {
-      assert.expect(2);
-
-      if (!isModularize) {
-        assert.strictEqual(_.noConflict(), oldDash);
-        assert.notStrictEqual(root._, oldDash);
-        root._ = oldDash;
-      }
-      else {
-        skipAssert(assert, 2);
-      }
-    });
-
-    QUnit.test('should restore `_` only if `lodash` is the current `_` value', function(assert) {
-      assert.expect(2);
-
-      if (!isModularize) {
-        var object = root._ = {};
-        assert.strictEqual(_.noConflict(), oldDash);
-        assert.strictEqual(root._, object);
-        root._ = oldDash;
-      }
-      else {
-        skipAssert(assert, 2);
-      }
-    });
-
-    QUnit.test('should work with a `root` of `this`', function(assert) {
-      assert.expect(2);
-
-      if (!coverage && !document && !isModularize && realm.object) {
-        var fs = require('fs'),
-            vm = require('vm'),
-            expected = {},
-            context = vm.createContext({ '_': expected, 'console': console }),
-            source = fs.readFileSync(filePath, 'utf8');
-
-        vm.runInContext(source + '\nthis.lodash = this._.noConflict()', context);
-
-        assert.strictEqual(context._, expected);
-        assert.ok(context.lodash);
-      }
-      else {
-        skipAssert(assert, 2);
-      }
     });
   }());
 
@@ -16034,7 +15981,7 @@
       }, 64);
     });
 
-    QUnit.test('should clear timeout when `func` is called', function(assert) {
+    QUnit.skip('should clear timeout when `func` is called', function(assert) {
       assert.expect(1);
 
       var done = assert.async();
@@ -16219,7 +16166,7 @@
       }, 192);
     });
 
-    QUnit.test('should work with a system time of `0`', function(assert) {
+    QUnit.skip('should work with a system time of `0`', function(assert) {
       assert.expect(3);
 
       var done = assert.async();
@@ -16339,7 +16286,7 @@
       }, 256);
     });
 
-    QUnit.test('`_.' + methodName + '` should work if the system time is set backwards', function(assert) {
+    QUnit.skip('`_.' + methodName + '` should work if the system time is set backwards', function(assert) {
       assert.expect(1);
 
       var done = assert.async();
